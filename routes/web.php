@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SetController;
 use App\Http\Middleware\Authenticate;
 
 /*
@@ -27,5 +28,12 @@ Route::post('/users', [UserController::class, 'create']);
 route::post('/logout', [UserController::class,'logout'])->middleware(Authenticate::class);
 
 route::post('/log',[UserController::class,'log']);
+
+route::get('/gestion',[SetController::class,'display']);
+
+route::get('/setcreate',[SetController::class,'create'])->middleware(Authenticate::class);
+
+route::get('/set/{id}',[SetController::class,'full'])->middleware(Authenticate::class);
+
 
 

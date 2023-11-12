@@ -43,6 +43,10 @@ return new class extends Migration
             $table->foreignid('handlings_id')->references('id')->on('handlings');
         });
 
+        Schema::table('sets', function (Blueprint $table) {
+            $table->foreignid('users_id')->references('id')->on('users');
+        });
+
         Schema::table('users_does_handlings', function (Blueprint $table) {
             $table->foreignid('users_id')->references('id')->on('users');
             $table->foreignid('handlings_id')->references('id')->on('handlings');
