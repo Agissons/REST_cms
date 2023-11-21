@@ -6,6 +6,7 @@
  * @version 18.09.2023
  */
 $title = "Gestion";
+
 ?>
 @extends('layout')
 
@@ -17,7 +18,7 @@ $title = "Gestion";
 
             </div>
             <div class=" col-3 ">
-                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> New set</button>
+                <button  href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Createset"> New set</button>
             </div>
 
         </div>
@@ -25,7 +26,7 @@ $title = "Gestion";
 
         @if($sets->isEmpty())
             <div class="text-center">
-                <p>Vous ne faite parti d'aucun ensemble
+                <p>Vous ne faites parti d'aucun ensemble
 
 
                 </p>
@@ -34,7 +35,7 @@ $title = "Gestion";
             </div>
         @else
             @foreach($sets as $set)
-                <div class="m-3" style=" border-style: outset; border-radius: 6px">
+                <div class="m-3 set " style=" border-style: outset; border-radius: 6px"  onclick="window.location.href = '/set/{{$set->id}}'" >
                     <div class="p-3">
                         <p>name : {{$set->name}}</p>
                     </div>
@@ -51,7 +52,7 @@ $title = "Gestion";
                             <p>
                                 Mealworms
                             </p>
-                             <p>
+                            <p>
                                 {{((float)$set->production)/1000}} kg
                             </p>
                         </div>
@@ -76,10 +77,23 @@ $title = "Gestion";
 
 
                 </div>
+
             @endforeach
         @endif
 
     </div>
+    @include('sets.modal')
+    <style>
+        .set:hover{
+            background-color: darkgreen;
+            opacity: 0.4;
+
+            color:whitesmoke;
+        }
+
+
+    </style>
+
 
 @endsection
 

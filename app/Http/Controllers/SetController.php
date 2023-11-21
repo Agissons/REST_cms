@@ -51,7 +51,7 @@ class SetController extends Controller
 
             if($exist)
             {
-                $boxes = Boxe::select('boxes.name', 'types.name as type' , 'boxes.created_at' , 'boxes.updated_at' , 'boxes.weight' ,'users.username')
+                $boxes = Boxe::select('boxes.id','boxes.name', 'types.name as type' , 'boxes.created_at' , 'boxes.updated_at' , 'boxes.weight' ,'users.username')
                     ->join('users','users.id',"=" ,'boxes.users_id')
                     ->join('types','types.id',"=" ,'boxes.types_id')
                     ->where('boxes.active' ,'=' ,1)
@@ -77,6 +77,21 @@ class SetController extends Controller
         }
 
 
+    }
+
+    public function guanoadd(Request $request)
+    {
+        $formFields = $request->validate([
+            // verifie si l'utilisateur existe déjà
+            'guano' => 'required',
+            'id' => 'required'
+        ]);
+
+        $set = Set::firstwhere('id', $formFields['id']);
+        $set->weight += $formFields['guano'];
+        $set->save();
+
+        return back();
     }
 
 

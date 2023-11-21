@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SetController;
 use App\Http\Middleware\Authenticate;
+use App\Http\Controllers\Users_work_setController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +32,11 @@ route::post('/log',[UserController::class,'log']);
 
 route::get('/gestion',[SetController::class,'display']);
 
-route::get('/setcreate',[SetController::class,'create'])->middleware(Authenticate::class);
+route::post('/setcreate',[SetController::class,'create'])->middleware(Authenticate::class);
 
 route::get('/set/{id}',[SetController::class,'full'])->middleware(Authenticate::class);
 
+route::post('/guanoadd',[SetController::class,'guanoadd'])->middleware(Authenticate::class);
 
+route::post('/usersadd',[Users_work_setController::class,'usersadd'])->middleware(Authenticate::class);
 

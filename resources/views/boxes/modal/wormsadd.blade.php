@@ -1,13 +1,13 @@
 <?php
 /**
- * @file modal.blade.php
+ * @file wormsadd.blade.php
  * @brief file description
  * @author Created by Blooooo
- * @version 01.11.2023
+ * @version 14.11.2023
  */
 ?>
 
-<div class="modal" id="Createset">
+<div class="modal" id="Wormsadd">
     <div class="modal-dialog">
         <div class="modal-content">
 

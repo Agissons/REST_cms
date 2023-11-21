@@ -39,7 +39,7 @@ foreach ($worms as $worm)
                         </div>
                         <div class="col-6 text-start">
                             <div >
-                                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> add</button>
+                                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Guanoadd"> add</button>
                             </div>
                             <div class="">
                                 <p>{{((float)$sets->weight)/1000}} kg</p>
@@ -61,7 +61,7 @@ foreach ($worms as $worm)
                                 <p>Worms</p>
                             </div>
                             <div class="">
-                                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> list</button>
+                                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Wormslist"> list</button>
                             </div>
                             <div class="">
                                 <p>Weight :</p>
@@ -74,7 +74,7 @@ foreach ($worms as $worm)
                                 <p> </p>
                             </div>
                             <div >
-                                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> add</button>
+                                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Wormsadd"> add</button>
                             </div>
                             <div class="">
                                 <p>{{((float)$prod)/1000}} kg</p>
@@ -88,9 +88,9 @@ foreach ($worms as $worm)
 
             </div>
             <div class=" col-4 ">
-                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> User Gestion</button>
-                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> nourrish</button>
-                <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> New Session</button>
+                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Users"> User Gestion</button>
+                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Nourish"> Nourish</button>
+                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> New Session</button>
             </div>
 
         </div>
@@ -162,6 +162,10 @@ foreach ($worms as $worm)
 
 
     </div>
-
+    @include('boxes.modal.guanoadd')
+    @include('boxes.modal.wormsadd')
+    @include('boxes.modal.wormslist')
+    @include('boxes.modal.users')
+    @include('boxes.modal.nourish')
 
 @endsection
