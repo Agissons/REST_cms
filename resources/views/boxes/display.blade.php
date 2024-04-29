@@ -61,10 +61,10 @@ foreach ($worms as $worm)
                                 <p>Worms</p>
                             </div>
                             <div class="">
-                                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Wormslist"> list</button>
+                                <p>Weight :</p>
                             </div>
                             <div class="">
-                                <p>Weight :</p>
+                                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Wormslist"> list</button>
                             </div>
 
 
@@ -73,12 +73,14 @@ foreach ($worms as $worm)
                             <div >
                                 <p> </p>
                             </div>
-                            <div >
-                                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Wormsadd"> add</button>
-                            </div>
                             <div class="">
                                 <p>{{((float)$prod)/1000}} kg</p>
                             </div>
+                            @if($boxes->contains('type','size4'))
+                            <div >
+                                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Wormsadd"> add</button>
+                            </div>
+                            @endif
 
 
                         </div>
@@ -90,7 +92,7 @@ foreach ($worms as $worm)
             <div class=" col-4 ">
                 <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Users"> User Gestion</button>
                 <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Nourish"> Nourish</button>
-                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> New Session</button>
+                <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#Session"> New Session</button>
             </div>
 
         </div>
@@ -120,9 +122,15 @@ foreach ($worms as $worm)
                                     <div class="">
                                         <p>Crée le :</p>
                                     </div>
+                                    @if($boxe->nourish!=null)
+                                    <div class="">
+                                        <p>Nouri le :</p>
+                                    </div>
+                                    @else
                                     <div class="">
                                         <p>Faites par :</p>
                                     </div>
+                                    @endif
 
                                 </div>
                                 <div class="col-6 text-start">
@@ -138,9 +146,15 @@ foreach ($worms as $worm)
                                     <div class="">
                                         <p>{{substr($boxe->created_at,0,10)}}</p>
                                     </div>
+                                    @if($boxe->nourish!=null)
+                                    <div class="">
+                                        <p>{{$boxe->nourish}}</p>
+                                    </div>
+                                    @else
                                     <div class="">
                                         <p>{{$boxe->username}}</p>
                                     </div>
+                                    @endif
 
                                 </div>
                             </div>
@@ -167,5 +181,6 @@ foreach ($worms as $worm)
     @include('boxes.modal.wormslist')
     @include('boxes.modal.users')
     @include('boxes.modal.nourish')
+    @include('boxes.modal.session')
 
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Boxe;
 use App\Models\Mealworm;
 use App\Models\Set;
+use App\Models\Guano;
 
 use App\Models\Users_work_set;
 use Illuminate\Http\Request;
@@ -51,12 +52,16 @@ class SetController extends Controller
 
             if($exist)
             {
-                $boxes = Boxe::select('boxes.id','boxes.name', 'types.name as type' , 'boxes.created_at' , 'boxes.updated_at' , 'boxes.weight' ,'users.username')
+                $boxes = Boxe::select('boxes.id','boxes.name', 'types.name as type' , 'boxes.created_at' , 'boxes.updated_at' , 'boxes.weight' ,'users.username','users_give_aliments.created_at as nourish')
                     ->join('users','users.id',"=" ,'boxes.users_id')
                     ->join('types','types.id',"=" ,'boxes.types_id')
+                    ->leftjoin('users_give_aliments','users_give_aliments.boxes_id','=','boxes.id')
                     ->where('boxes.active' ,'=' ,1)
                     ->where('boxes.sets_id' ,'=' ,$id)
                     ->get();
+
+                
+                    
 
                 $worms= Mealworm::select('boxes.name as boxe','mealworms.code', 'mealworms.created_at' , 'mealworms.updated_at' , 'mealworms.weight' )
                     ->join('boxes','boxes.id',"=" ,'mealworms.boxes_id')
@@ -84,9 +89,38 @@ class SetController extends Controller
         $formFields = $request->validate([
             // verifie si l'utilisateur existe déjà
             'guano' => 'required',
-            'id' => 'required'
+            'id' => 'required',
+            'name'=> 'max:50'
+        ]);
+        
+
+        if($formFields['guano']<0)
+        {
+            if($formFields['name']==null)
+            {
+                return back()->withErrors(['name'=>'renseigner à qui vous le donner'])->onlyInput('name');
+            }
+            Guano::create(['name'=>$formFields['name'],'weight'=>-$formFields['guano'], 'sets_id'=>$formFields['id']]);
+        }
+        $set = Set::firstwhere('id', $formFields['id']);
+        $set->weight += $formFields['guano'];
+        $set->save();
+
+        return back();
+    }
+
+    public function wormsadd(Request $request)
+    {
+        $formFields = $request->validate([
+            // verifie si l'utilisateur existe déjà
+            'worms' => 'required',
+            'id' => 'required',
+            'weight'=>'requiered',
+            'code'=>['required', Rule::unique('Mealworms','code')]
         ]);
 
+        Mealworms::create([]);
+        create(['users_id'=>auth()->user()->id,'sets_id'=>$setId]);
         $set = Set::firstwhere('id', $formFields['id']);
         $set->weight += $formFields['guano'];
         $set->save();

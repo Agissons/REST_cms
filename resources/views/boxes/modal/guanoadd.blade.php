@@ -22,10 +22,18 @@
                 <form method="POST" action="/guanoadd">
                     @csrf <!-- juste de la securité  https://laravel.com/docs/5.8/csrf -->
                     <div class="mb-3 mt-3">
-                        <label for="guano">Quantité de Guano récoltée:</label>
+                        <label for="guano">Quantité de Guano récoltée (s'il est donner noter le en négatif):</label>
                         <input type="number" class="form-control" name="guano" placeholder="Quantité de Guano (en g)"
                                value="{{old('guano')}}">
                         @error('guano')
+                        <p>{{$message}}</p>
+                        @enderror
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <label for="name">Nom personne offerte:</label>
+                        <input type="text" class="form-control" name="name" placeholder="Nom personne offerte"
+                               value="{{old('name')}}">
+                        @error('name')
                         <p>{{$message}}</p>
                         @enderror
                     </div>
