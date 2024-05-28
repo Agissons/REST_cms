@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Mealworm extends Model
+class Tag extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'code',
-        'weight',
-        'boxes_id',
-        'sets_id'
+        'name',
+        'id'
+        
     ];
 }

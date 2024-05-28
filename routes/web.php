@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Activist;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SetController;
 use App\Http\Middleware\Authenticate;

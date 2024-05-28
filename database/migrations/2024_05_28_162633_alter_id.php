@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',10);
+        //
+        Schema::table('users_had_tags', function (Blueprint $table) {
+            $table->foreignid('user_id')->references('id')->on('activists')->onDelete('cascade');
+            $table->foreignid('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
-
-
     }
 
     /**
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('types');
+        //
     }
 };

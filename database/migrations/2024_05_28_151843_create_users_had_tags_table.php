@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sets', function (Blueprint $table) {
+        Schema::create('users_had_tags', function (Blueprint $table) {
             $table->id();
-            $table->string('name',20)->unique();
-            $table->timestamps();
-            $table->unsignedSmallInteger('weight');
         });
     }
 
@@ -24,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sets');
+        Schema::dropIfExists('users_had_tags');
     }
 };

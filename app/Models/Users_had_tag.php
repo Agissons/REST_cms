@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Handling extends Model
+class Users_had_tag extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'sets_id'
+        'id',
+        'tag_id',
+        'user_id'        
+        
     ];
 }
