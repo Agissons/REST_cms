@@ -12,67 +12,52 @@ $title = "Gestion";
 
 @section('content')
 
+
     <div class="container ">
         <div class="row">
             <div class="col-9">
 
             </div>
             <div class=" col-3 ">
-                <button  href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Createset"> New set</button>
+                <button  href="#" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Createvolunteer"> Nouveau Sympatisant</button>
             </div>
 
         </div>
 
 
-        @if($sets->isEmpty())
+        @if($volunteers->isEmpty())
             <div class="text-center">
-                <p>Vous ne faites parti d'aucun ensemble
-
-
+                <p>Votre filtre ne contient personne.
                 </p>
-
-
             </div>
         @else
-            @foreach($sets as $set)
-                <div class="m-3 set " style=" border-style: outset; border-radius: 6px"  onclick="window.location.href = '/set/{{$set->id}}'" >
+            @foreach($volunteers as $volunteer)
+                <div class="m-3 set " style=" border-style: outset; border-radius: 6px"  onclick="window.location.href = '/volunteer/{{$volunteer->id}}'" >
                     <div class="p-3">
-                        <p>name : {{$set->name}}</p>
+                        <p>Nom : {{$volunteer->first_name}} {{$volunteer->last_name}}</p>
                     </div>
                     <div class="row text-center">
                         <div class="col-3 p-2">
-                            <p>
-                                Boxes
+                            <p>Adresse
                             </p>
                             <p>
-                                {{$set->boxes}}
-                            </p>
-                        </div>
-                        <div class="col-3 p-2">
-                            <p>
-                                Mealworms
-                            </p>
-                            <p>
-                                {{((float)$set->production)/1000}} kg
+                                {{$volunteer->primary_zip}}
                             </p>
                         </div>
                         <div class="col-3 p-2">
-                            <p>
-                                Guano
+                            <p>Echelle de l'engagement
                             </p>
                             <p>
-                                {{((float)$set->weight)/1000}} kg
+                                {{ $volunteer->scale}}
                             </p>
                         </div>
                         <div class="col-3 p-2">
-                            <p>
-                                Users
+                            <p>Organizer
                             </p>
                             <p>
-                                {{$set->users}}
+                                {{$volunteer->username}}
                             </p>
                         </div>
-
                     </div>
 
 
@@ -82,7 +67,7 @@ $title = "Gestion";
         @endif
 
     </div>
-    @include('sets.modal')
+    @include('volunteers.modal')
     <style>
         .set:hover{
             background-color: darkgreen;

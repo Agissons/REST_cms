@@ -37,7 +37,7 @@ $title= "Insecto";
         <li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>
 
         @auth
-            <li class="nav-item"><a class="nav-link" href="/gestion" style="color:#386641">Gestion</a></li>
+            <li class="nav-item"><a class="nav-link" href="/display" style="color:#386641">Gestion</a></li>
             <li class="nav-item" ><form method="post" action="/logout" style="border-color: white;background-color: white; box-shadow:0 0">
                     @csrf
                     <button class="nav-link" type="submit"  style="color:#386641;border-color: white;background-color: white; box-shadow:0 0" >Logout</button>

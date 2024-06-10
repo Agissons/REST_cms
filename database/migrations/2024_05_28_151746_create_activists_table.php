@@ -48,11 +48,11 @@ return new class extends Migration
             $table->unsignedInteger('donations_raised_count_this_cycle');
             $table->boolean('is_volunteer');
             $table->string('availability',255);
-            $table->float('donations_amount');
-            $table->float('donations_raised_amount');
-            $table->float('donations_pledged_amount');
-            $table->float('donations_amount_this_cycle');
-            $table->float('donations_raised_amount_this_cycle');
+            $table->unsignedInteger('donations_amount');
+            $table->unsignedInteger('donations_raised_amount');
+            $table->unsignedInteger('donations_pledged_amount');
+            $table->unsignedInteger('donations_amount_this_cycle');
+            $table->unsignedInteger('donations_raised_amount_this_cycle');
             $table->timestamp('unsubscribed_at');
             $table->timestamp('first_donated_at');
             $table->timestamp('last_donated_at');
