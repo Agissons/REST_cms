@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Next_move extends Model
+class Volunteer_pledges_donation extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "description",
-        "organisez_id",
-        "volunteer_id",
-        'date',
-        "next_move_type"
+        "donations_amount",
+        "interaction_id",
+        "realised",
+        "volunteer_id"
     ];
 }

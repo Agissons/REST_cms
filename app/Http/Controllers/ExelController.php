@@ -59,6 +59,147 @@ class ExelController extends Controller
 
 
     
+    
+
+
+
+
+
+
+    
+    if (($handle = fopen(public_path('csv/action_network.csv'), 'r')) !== false)
+    {
+        while (($row = fgetcsv($handle, 1000, ',')) !== false)
+        {
+            if (!$header)
+                $header = $row;
+            else
+            $acdata[] = array_combine($header, $row);
+        }
+        fclose($handle);
+    }
+    
+    $acdata = array_filter($acdata, fn ($e) => ($e['Mobile Number'] != ""));
+    foreach ($acdata as $row) 
+    {
+
+        $row["Mobile Number"]=preg_replace('/\+/', '', $row["Mobile Number"]);
+        
+        $info=0;
+        $soutien=0;
+        if(boolval($row["Sympathisant X Bénévole_Je souhaite en savoir plus sur la campagne (soirée d'info, discussion, ...)"])||boolval($row['Sympathisant X Bénévole_En savoir plus'])||boolval($row["Sympathisant X Bénévole_En savoir plus sur la campagne (soirée d'information, conversation, ...)"])||boolval($row['Sympathisant X Bénévole_Suivre les informations de la campagne "Nos Transports Publics"'])||boolval($row["Sympathisant X Bénévole_Recevoir des infos"])){
+            $info=1;
+        }
+        if(boolval($row[ 'Sympathisant X Bénévole_Aider ~ Soutenir plus activement la campagne'])||boolval($row["Sympathisant X Bénévole_Soutenir la campagne"])){
+            $soutien=1;
+        }
+        //dd($row);
+        if($row["Mobile Number"]!='')
+        {
+            $user=Exel::select()->firstWhere('phone_number',$row["Mobile Number"]);
+            //dd($user);
+            if($user==null)
+            {
+                $user=Exel::select()->firstWhere('email',$row["Email"]);
+                //dd($user);
+                if($user==null)
+                {
+                    $user=Exel::select()->Where('first_name','=',$row["First name"])->Where('last_name','=',$row["Last name"])->limit(1)->get();
+                    
+                    if($user->isEmpty())
+                    {
+                        Exel::insert(["first_name"=>$row['First name'],"last_name"=>$row['Last name'],"phone_number"=>$row['Mobile Number'],
+                        'email'=>$row["Email"],
+                        'primary_zip'=>$row['Zip code'],"appel" => 1,
+                        "info" => $info,"question" => $row['Question ouverte']
+                        ,"soutien" => $soutien]); 
+                    }
+                    else
+                    {
+                            
+                        $user[0]->update(["phone_number"=>$row['Mobile Number'],
+                        'email'=>$row["Email"],
+                        'primary_zip'=>$row['Zip code'],"appel" => 1,
+                        "info" => $info,"question" => $row['Question ouverte']
+                        ,"soutien" => $soutien]);
+                                                   
+                    }             
+                }
+                else
+                {
+                    $user->update(["phone_number"=>$row['Mobile Number'],
+                    
+                    'primary_zip'=>$row['Zip code'],"appel" => 1,
+                    "info" => $info,"question" => $row['Question ouverte']
+                    ,"soutien" => $soutien]);
+                    
+                }   
+            }
+            else
+            {
+                $user->update([
+                    'primary_zip'=>$row['Zip code'],"appel" => 1,
+                    "info" => $info,"question" => $row['Question ouverte']
+                    ,"soutien" => $soutien]);
+
+                
+            }
+
+        }
+        
+        
+        //return view('fail',[]);
+    }
+    if (($handle = fopen(public_path('csv/raise_now.csv'), 'r')) !== false)
+    {
+        while (($row = fgetcsv($handle, 1000, ',')) !== false)
+        {
+            if (!$header2)
+                $header2 = $row;
+            else
+            $rndata[] = array_combine($header2, $row);
+        }
+        fclose($handle);
+    }
+    
+    foreach ($rndata as $row) 
+    {
+
+        $row['amount_formatted']=floatval($row['amount_formatted']);
+        //dd($row);
+        $user=Exel::select()->firstWhere('email',$row["stored_customer_email"]);
+            //dd($user);
+            if($user==null)
+            {
+                $user=Exel::select()->Where('first_name','=',$row["stored_customer_firstname"])->Where('last_name','=',$row["stored_customer_lastname"])->limit(1)->get();
+                    
+                if($user->isEmpty())
+                {
+                    Exel::insert(["first_name"=>$row['stored_customer_firstname'],"last_name"=>$row['stored_customer_lastname'],
+                    'email'=>$row["stored_customer_email"],"donations_amount"=> $row['amount_formatted'],
+                    "new_donations_amount"=>$row['amount_formatted'] ]); 
+                }
+                else
+                {
+                            
+                    $user[0]->update(['email'=>$row["stored_customer_email"],"donations_amount"=>$user[0]->donations_amount+ $row['amount_formatted'],
+                    "new_donations_amount"=>$row['amount_formatted']]);
+                                                   
+                }             
+            }
+            else
+            {
+                $user->update(["donations_amount"=>$user->donations_amount+ $row['amount_formatted'],
+                "new_donations_amount"=>$row['amount_formatted']]);
+                //dd($user);
+            }
+
+        //return view('fail',[]);
+    }
+    dd($rndata);
+
+
+
     if (($handle = fopen(public_path('csv/usedfile.csv'), 'r')) !== false)
     {
         while (($row = fgetcsv($handle, 1000, ',')) !== false)
@@ -70,9 +211,8 @@ class ExelController extends Controller
         }
         fclose($handle);
     }
-
-    //$docdata = array_values(array_filter($docdata, fn ($e) => ($e['DATE RAPPEL'] != "")));
-    //dd($docdata);
+    
+    $docdata = array_values(array_filter($docdata, fn ($e) => ($e['Date'] != "#N/A")));
     foreach ($docdata as $row)
     {
 
@@ -134,142 +274,6 @@ class ExelController extends Controller
     }
 
 
-
-
-
-
-    
-    if (($handle = fopen(public_path('csv/action_network.csv'), 'r')) !== false)
-    {
-        while (($row = fgetcsv($handle, 1000, ',')) !== false)
-        {
-            if (!$header)
-                $header = $row;
-            else
-            $acdata[] = array_combine($header, $row);
-        }
-        fclose($handle);
-    }
-    
-    $acdata = array_filter($acdata, fn ($e) => ($e['Mobile Number'] != ""));
-    foreach ($acdata as $row) 
-    {
-
-        $row["Mobile Number"]=preg_replace('/\+/', '', $row["Mobile Number"]);
-        $row['Don_cf_tppg']=floatval($row['Don_cf_tppg']);
-        $info=0;
-        $soutien=0;
-        if(boolval($row["Sympathisant X Bénévole_Je souhaite en savoir plus sur la campagne (soirée d'info, discussion, ...)"])||boolval($row['Sympathisant X Bénévole_En savoir plus'])||boolval($row["Sympathisant X Bénévole_En savoir plus sur la campagne (soirée d'information, conversation, ...)"])||boolval($row['Sympathisant X Bénévole_Suivre les informations de la campagne "Nos Transports Publics"'])||boolval($row["Sympathisant X Bénévole_Recevoir des infos"])){
-            $info=1;
-        }
-        if(boolval($row[ 'Sympathisant X Bénévole_Aider ~ Soutenir plus activement la campagne'])||boolval($row["Sympathisant X Bénévole_Soutenir la campagne"])){
-            $soutien=1;
-        }
-        //dd($row);
-        if($row["Mobile Number"]!='')
-        {
-            $user=Exel::select()->firstWhere('phone_number',$row["Mobile Number"]);
-            //dd($user);
-            if($user==null)
-            {
-                $user=Exel::select()->firstWhere('email',$row["Email"]);
-                //dd($user);
-                if($user==null)
-                {
-                    $user=Exel::select()->Where('first_name','=',$row["First name"])->Where('last_name','=',$row["Last name"])->limit(1)->get();
-                    
-                    if($user->isEmpty())
-                    {
-                        Exel::insert(["first_name"=>$row['First name'],"last_name"=>$row['Last name'],"phone_number"=>$row['Mobile Number'],
-                        'email'=>$row["Email"],"donations_amount"=> $row['Don_cf_tppg'],
-                        'primary_zip'=>$row['Zip code'],"new_donations_amount"=>$row['Don_cf_tppg'] ,"appel" => 1,
-                        "info" => $info,"question" => $row['Question ouverte']
-                        ,"soutien" => $soutien]); 
-                    }
-                    else
-                    {
-                            
-                        $user[0]->update(["phone_number"=>$row['Mobile Number'],
-                        'email'=>$row["Email"],"donations_amount"=> $user[0]->donations_amount+$row['Don_cf_tppg'],
-                        'primary_zip'=>$row['Zip code'],"new_donations_amount"=>$row['Don_cf_tppg'] ,"appel" => 1,
-                        "info" => $info,"question" => $row['Question ouverte']
-                        ,"soutien" => $soutien]);
-                                                   
-                    }             
-                }
-                else
-                {
-                    $user->update(["phone_number"=>$row['Mobile Number'],
-                    "donations_amount"=> $user->donations_amount+$row['Don_cf_tppg'],
-                    'primary_zip'=>$row['Zip code'],"new_donations_amount"=>$row['Don_cf_tppg'] ,"appel" => 1,
-                    "info" => $info,"question" => $row['Question ouverte']
-                    ,"soutien" => $soutien]);
-                    
-                }   
-            }
-            else
-            {
-                $user->update(["donations_amount"=> $user->donations_amount+$row['Don_cf_tppg'],
-                    'primary_zip'=>$row['Zip code'],"new_donations_amount"=>$row['Don_cf_tppg'] ,"appel" => 1,
-                    "info" => $info,"question" => $row['Question ouverte']
-                    ,"soutien" => $soutien]);
-
-                
-            }
-
-        }
-        
-        
-        //return view('fail',[]);
-    }
-    if (($handle = fopen(public_path('csv/raise_now.csv'), 'r')) !== false)
-    {
-        while (($row = fgetcsv($handle, 1000, ',')) !== false)
-        {
-            if (!$header2)
-                $header2 = $row;
-            else
-            $rndata[] = array_combine($header2, $row);
-        }
-        fclose($handle);
-    }
-    
-    foreach ($rndata as $row) 
-    {
-
-        $row['amount_formatted']=floatval($row['amount_formatted']);
-        //dd($row);
-        $user=Exel::select()->firstWhere('email',$row["stored_customer_email"]);
-            //dd($user);
-            if($user==null)
-            {
-                $user=Exel::select()->Where('first_name','=',$row["stored_customer_firstname"])->Where('last_name','=',$row["stored_customer_lastname"])->limit(1)->get();
-                    
-                if($user->isEmpty())
-                {
-                    Exel::insert(["first_name"=>$row['stored_customer_firstname'],"last_name"=>$row['stored_customer_lastname'],
-                    'email'=>$row["stored_customer_email"],"donations_amount"=> $row['amount_formatted'],
-                    "new_donations_amount"=>$row['amount_formatted'] ]); 
-                }
-                else
-                {
-                            
-                    $user[0]->update(['email'=>$row["stored_customer_email"],"donations_amount"=>$user[0]->donations_amount+ $row['amount_formatted'],
-                    "new_donations_amount"=>$row['amount_formatted']]);
-                                                   
-                }             
-            }
-            else
-            {
-                $user->update(["donations_amount"=>$user->donations_amount+ $row['amount_formatted'],
-                "new_donations_amount"=>$row['amount_formatted']]);
-                //dd($user);
-            }
-
-        //return view('fail',[]);
-    }
-
-
     
 
         
@@ -279,7 +283,7 @@ class ExelController extends Controller
     }
     public function extract()
     {
-    $data = Exel::where('soutien','=',1)->orWhere('info','=',1)->orWhere(function (Builder $query) {
+    $data = DB::table('exels')->where('soutien','=',1)->orWhere('info','=',1)->orWhere(function (Builder $query) {
         $query->whereNull('wa2_exit_date')
               ->whereNotNull('wa2_enter_date');
     })

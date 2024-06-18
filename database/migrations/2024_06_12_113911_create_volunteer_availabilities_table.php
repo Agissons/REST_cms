@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('next_moves', function (Blueprint $table) {
+        Schema::create('volunteer_availabilities', function (Blueprint $table) {
             $table->id();
-            $table->string('description',255)->nullable();
             $table->timestamps();
-            $table->timestamp('date');
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('next_moves');
+        Schema::dropIfExists('volunteer_availabilities');
     }
 };

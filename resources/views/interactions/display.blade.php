@@ -16,15 +16,30 @@ $title = "Gestion";
 
     <div class="container ">
         <div class="p-3 " style=" border-style: outset; border-radius: 6px">
-            <form method="POST" action="">
+            <form method="POST" action="/newinteractions">
                 @csrf <!-- juste de la securité  https://laravel.com/docs/5.8/csrf -->
+                <div class="mb-3 mt-3" hidden>
+                    <label for="volunteer_id">contenu de l'interaction</label>
+                    <input type="number" class="form-control" name="volunteer_id" placeholder="contenu de l'interaction"
+                       value="{{$volunteer->id}}">
+                    @error('volunteer_id')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div><div class="mb-3 mt-3" hidden>
+                    <label for="interactor_id">contenu de l'interaction</label>
+                    <input type="number" class="form-control" name="interactor_id" placeholder="contenu de l'interaction"
+                       value="{{auth()->user()->id}}">
+                    @error('interactor_id')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
                 <div class="mb-3 mt-3">
-                    <label for="type" >type d'interaction</label>
-                    <select type="text" class="form-control" name="type" >
+                    <label for="interaction_type" >type d'interaction</label>
+                    <select type="text" class="form-control" name="interaction_type" >
                     @foreach($interaction_types as $interaction_type)
                     <option value="{{$interaction_type->id}}">{{$interaction_type->type}}</option>
                     @endforeach
-                    @error('type')
+                    @error('interaction_type')
                     <p>{{$message}}</p>
                     @enderror
                     </select>
@@ -34,6 +49,59 @@ $title = "Gestion";
                     <input type="text" class="form-control" name="interaction" placeholder="contenu de l'interaction"
                        value="{{old('interaction')}}">
                     @error('interaction')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <input type="checkbox"  name="whatsapp" >
+                    <label for="whatsapp" >Veux être rajouter sur whatsapp</label>
+                    @error('whatsapp')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <input type="radio" id="1" name="desincription" value='1'>
+                    <label for="1">Ne veux plus être appeller</label><br>
+                    <input type="radio" id="2" name="desincription" value='2'>
+                    <label for="2">Ne veux plus être contacter</label><br>
+                    <input type="radio" id="3" name="desincription" value='3'>
+                    <label for="3">veux être suprimer de la base de donnée</label>
+                    @error('desincription')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="raison">Raison de la desincription</label>
+                    <input type="text" class="form-control" name="raison" placeholder="Raison de la desincription"
+                       value="{{old('raison')}}">
+                    @error('next_move')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="interessed">interessé par</label>
+                </br>
+                    <input type="checkbox"  name="whatsapp" >
+                    <label for="whatsapp" >Phoning</label>
+                    @error('whatsapp')
+                    <p>{{$message}}</p>
+                    @enderror
+                </br>
+                    <input type="checkbox"  name="whatsapp" >
+                    <label for="whatsapp" >Terain</label>
+                    @error('whatsapp')
+                    <p>{{$message}}</p>
+                    @enderror
+                </br>
+                    <input type="checkbox"  name="whatsapp" >
+                    <label for="whatsapp" >Grève Féministe</label>
+                    @error('whatsapp')
+                    <p>{{$message}}</p>
+                    @enderror
+                </br>
+                    <input type="checkbox"  name="whatsapp" >
+                    <label for="whatsapp" >Festival de la cité</label>
+                    @error('whatsapp')
                     <p>{{$message}}</p>
                     @enderror
                 </div>
@@ -69,6 +137,37 @@ $title = "Gestion";
                     <input type="number" class="form-control" name="donation_pledge" placeholder="Montant de la promesse de don"
                        value="{{old('donation_pledge')}}">
                     @error('donation_pledge')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <input type="checkbox"  name="donation" >
+                    <label for="donation" >A fait un don pendant l'appel</label>
+                    @error('donation')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="entousiasmed">entousiasmed ou pas</label>
+                    <input type="text" class="form-control" name="entousiasmed" placeholder="Decrivez la prochaine action"
+                       value="{{old('entousiasmed')}}">
+                    @error('entousiasmed')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="engagement_spe">engagement speciale</label>
+                    <input type="text" class="form-control" name="engagement_spe" placeholder="Decrivez la prochaine action"
+                       value="{{old('engagement_spe')}}">
+                    @error('engagement_spe')
+                    <p>{{$message}}</p>
+                    @enderror
+                </div>
+                <div class="mb-3 mt-3">
+                    <label for="ressource">ressource +++</label>
+                    <input type="text" class="form-control" name="ressource" placeholder="Decrivez la prochaine action"
+                       value="{{old('ressource')}}">
+                    @error('ressource')
                     <p>{{$message}}</p>
                     @enderror
                 </div>

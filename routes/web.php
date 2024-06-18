@@ -6,7 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\SetController;
 use App\Http\Middleware\Authenticate;
-use App\Http\Controllers\Users_work_setController;
+use App\Http\Controllers\InteractionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,5 +46,5 @@ route::get('/set/{id}',[SetController::class,'full'])->middleware(Authenticate::
 
 route::post('/guanoadd',[SetController::class,'guanoadd'])->middleware(Authenticate::class);
 
-route::post('/usersadd',[Users_work_setController::class,'usersadd'])->middleware(Authenticate::class);
+route::post('/newinteractions',[InteractionController::class,'create'])->middleware(Authenticate::class);
 

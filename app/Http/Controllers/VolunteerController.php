@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Volunteer;
 use App\Models\Volunteer_act_campaign;
 use App\Models\Volunteer_does_donation;
+use App\Models\Volunteer_pledges_donation;
 use App\Models\Volunteer_scale;
 use App\Models\Volunteer_sign_call;
 use App\Models\Volunteer_use_canal;
@@ -32,7 +33,7 @@ class VolunteerController extends Controller
         ->get();
 
 
-        $volunteer=Volunteer::select('volunteers.first_name', 'volunteers.last_name', 'volunteers.primary_address1', 'volunteers.primary_state', 'volunteers.primary_city', 'volunteers.primary_zip','volunteer_scales.scale','users.username')->where('volunteers.id', $id)
+        $volunteer=Volunteer::select('volunteers.id', 'volunteers.first_name', 'volunteers.last_name', 'volunteers.primary_address1', 'volunteers.primary_state', 'volunteers.primary_city', 'volunteers.primary_zip','volunteer_scales.scale','users.username')->where('volunteers.id', $id)
         ->join('volunteer_scales','volunteer_scales.id',"=" ,'volunteers.volunteer_scale')
         ->join('users','users.id',"=" ,'volunteers.organizer_id')
         ->get();
@@ -43,9 +44,10 @@ class VolunteerController extends Controller
 
         $notes=Note::select('content')->where('volunteer_id','=',$id)->get();
 
-        $next_moves=Next_move::select('description','next_move_types.type','users.username')->where('volunteer_id','=',$id)
-        ->join('users','users.id',"=",'next_moves.organizer_id')
+        $next_moves=Next_move::select('next_moves.description','next_move_types.type','users.username')->where('volunteer_id','=',$id)
+        ->leftjoin('users','users.id',"=",'next_moves.organizer_id')
         ->join('next_move_types','next_move_types.id',"=" ,'next_moves.next_move_type')->get();
+        //dd($next_moves);
 
         $interactions=Interaction::select('interactions.interaction','users.username','interactions.created_at' ,'interaction_types.type', 'campaigns.name')->where('volunteer_id','=',$id)
         ->join('users','users.id',"=" ,'interactions.interactor_id')
@@ -56,6 +58,8 @@ class VolunteerController extends Controller
         ->join('campaigns','campaigns.id',"=" ,'volunteer_act_campaigns.campaign_id')->get();
 
         $donations=Volunteer_does_donation::select('donations_amount','created_at')->where('volunteer_id','=',$id)
+        ->get();
+        $donation_pledges=Volunteer_pledges_donation::select('donations_amount','created_at')->where('volunteer_id','=',$id)
         ->get();
 
         $calls=Volunteer_sign_call::select('volunteer_sign_calls.question','calls.name')->where('volunteer_id','=',$id)

@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Next_move extends Model
+class Departure extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "description",
-        "organisez_id",
-        "volunteer_id",
-        'date',
-        "next_move_type"
+        "content",
+        "volunteer_id"
     ];
 }
