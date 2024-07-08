@@ -5,7 +5,7 @@
  * @author Created by Pablo-Fernando.ZUBIE
  * @version 04.05.2023
  */
-$title = "Login";
+$title = 'Login';
 ?>
 @extends('layout')
 
@@ -17,7 +17,7 @@ $title = "Login";
                 <label for="username">Acronyme:</label>
                 <input type="text" class="form-control" name="username" placeholder="Acronyme">
                 @error('username')
-                <p>{{$message}}</p>
+                    <p>{{ $message }}</p>
                 @enderror
             </div>
 
@@ -26,14 +26,16 @@ $title = "Login";
                 <label for="password">Mot de passe:</label>
                 <input type="password" class="form-control" name="password" placeholder="Mot de passe">
                 @error('password')
-                <p>{{$message}}</p>
+                    <p>{{ $message }}</p>
                 @enderror
             </div>
             <div class="mb-3 row">
 
-                <button type="submit" name="log" class="btn btn-primary col-5" style="background-color: #a7c957;color:#bc4749;border:#386641" >Login</button>
+                <button type="submit" name="log" class="btn btn-primary col-5"
+                    style="background-color: #a7c957;color:#bc4749;border:#386641">Login</button>
                 <div class="col-2"></div>
-                <button type="reset" class="btn btn-primary col-5" style="background-color: #a7c957;color:#bc4749;border:#386641" >Annuler </button>
+                <button type="reset" class="btn btn-primary col-5"
+                    style="background-color: #a7c957;color:#bc4749;border:#386641">Annuler </button>
             </div>
 
 

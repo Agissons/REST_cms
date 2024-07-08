@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('volunteer_use_canals', function (Blueprint $table) {
             $table->id();
-            $table->string('entry_way',50);
+            $table->string('entry_way', 50);
             $table->timestamps();
         });
     }

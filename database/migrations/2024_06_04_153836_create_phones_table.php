@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('phones', function (Blueprint $table) {
             $table->id();
-            $table->string('phone_number',30);
+            $table->string('phone_number', 30);
             $table->boolean('opt_in');
-            
         });
     }
 

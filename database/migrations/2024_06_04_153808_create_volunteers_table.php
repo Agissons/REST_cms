@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('volunteers', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name',255);
-            $table->string('last_name',255);
-            $table->string('primary_address1',255)->nullable();
-            $table->string('primary_state',30)->nullable();
-            $table->string('primary_city',255)->nullable();
-            $table->string('primary_zip',10)->nullable();
-            $table->string('primary_country_code',10)->nullable();
-            $table->string('primary_country',255)->nullable();
+            $table->string('first_name', 255);
+            $table->string('last_name', 255);
+            $table->string('primary_address1', 255)->nullable();
+            $table->string('primary_state', 30)->nullable();
+            $table->string('primary_city', 255)->nullable();
+            $table->string('primary_zip', 10)->nullable();
+            $table->string('primary_country_code', 10)->nullable();
+            $table->string('primary_country', 255)->nullable();
             $table->timestamps();
         });
     }

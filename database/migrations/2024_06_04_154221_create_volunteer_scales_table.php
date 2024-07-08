@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('volunteer_scales', function (Blueprint $table) {
             $table->id();
-            $table->string('scale',40);
+            $table->string('scale', 40);
         });
     }
 

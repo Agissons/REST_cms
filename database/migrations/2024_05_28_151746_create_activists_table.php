@@ -13,25 +13,25 @@ return new class extends Migration
     {
         Schema::create('activists', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name',255);
-            $table->string('last_name',255);
-            $table->string('full_name',255);
-            $table->string('email',255);
-            $table->string('email1',255);
-            $table->string('phone_number',30);
+            $table->string('first_name', 255);
+            $table->string('last_name', 255);
+            $table->string('full_name', 255);
+            $table->string('email', 255);
+            $table->string('email1', 255);
+            $table->string('phone_number', 30);
             $table->boolean('email_opt_in');
             $table->boolean('email1_is_bad');
             $table->boolean('mobile_opt_in');
             $table->boolean('is_mobile_bad');
             $table->boolean('do_not_call');
             $table->boolean('do_not_contact');
-            $table->string('primary_address1',255);
-            $table->string('primary_state',30);
-            $table->string('primary_city',255);
-            $table->string('primary_zip',10);
-            $table->string('primary_country_code',10);
-            $table->string('primary_country',255);
-            $table->string('note',1000);
+            $table->string('primary_address1', 255);
+            $table->string('primary_state', 30);
+            $table->string('primary_city', 255);
+            $table->string('primary_zip', 10);
+            $table->string('primary_country_code', 10);
+            $table->string('primary_country', 255);
+            $table->string('note', 1000);
             $table->unsignedInteger('signup_type');
             $table->boolean('is_prospect');
             $table->boolean('is_supporter');
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->unsignedInteger('donations_count_this_cycle');
             $table->unsignedInteger('donations_raised_count_this_cycle');
             $table->boolean('is_volunteer');
-            $table->string('availability',255);
+            $table->string('availability', 255);
             $table->unsignedInteger('donations_amount');
             $table->unsignedInteger('donations_raised_amount');
             $table->unsignedInteger('donations_pledged_amount');

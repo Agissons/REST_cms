@@ -24,27 +24,27 @@ Route::get('/', function () {
 });
 Route::get('/combine', [ExelController::class, 'combine'])->name('combine');
 Route::get('/extract', [ExelController::class, 'extract'])->name('extract');
+Route::get('/raisenowsynthesis', [ExelController::class, 'raisenowSynthesis'])->name('raisenowsynthesis');
 Route::get('/display', [VolunteerController::class, 'display'])->name('display');
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::get('/create', [VolunteerController::class, 'create'])->name('create');
-route::get('/volunteer/{id}',[VolunteerController::class,'full'])->middleware(Authenticate::class);
+route::get('/volunteer/{id}', [VolunteerController::class, 'full'])->middleware(Authenticate::class);
 
 Route::get('/register', [UserController::class, 'register']);
 
 Route::post('/users', [UserController::class, 'create']);
 
-route::post('/logout', [UserController::class,'logout'])->middleware(Authenticate::class);
+route::post('/logout', [UserController::class, 'logout'])->middleware(Authenticate::class);
 
-route::post('/log',[UserController::class,'log']);
+route::post('/log', [UserController::class, 'log']);
 
-route::get('/gestion',[SetController::class,'display']);
+route::get('/gestion', [SetController::class, 'display']);
 
-route::post('/setcreate',[SetController::class,'create'])->middleware(Authenticate::class);
+route::post('/setcreate', [SetController::class, 'create'])->middleware(Authenticate::class);
 
-route::get('/set/{id}',[SetController::class,'full'])->middleware(Authenticate::class);
+route::get('/set/{id}', [SetController::class, 'full'])->middleware(Authenticate::class);
 
-route::post('/guanoadd',[SetController::class,'guanoadd'])->middleware(Authenticate::class);
+route::post('/guanoadd', [SetController::class, 'guanoadd'])->middleware(Authenticate::class);
 
-route::post('/newinteractions',[InteractionController::class,'create'])->middleware(Authenticate::class);
-
+route::post('/newinteractions', [InteractionController::class, 'create'])->middleware(Authenticate::class);

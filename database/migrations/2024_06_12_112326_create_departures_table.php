@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('departures', function (Blueprint $table) {
             $table->id();
-            $table->string('content',1000);
+            $table->string('content', 1000);
             $table->timestamps();
             $table->foreignid('volunteer_id')->references('id')->on('volunteers')->nullable();
         });

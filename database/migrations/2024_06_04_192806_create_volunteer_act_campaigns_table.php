@@ -16,7 +16,6 @@ return new class extends Migration
             $table->boolean('soutien');
             $table->boolean('info');
             $table->timestamps();
-
         });
     }
 

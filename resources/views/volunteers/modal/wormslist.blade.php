@@ -19,11 +19,11 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                @foreach($worms as $worm)
+                @foreach ($worms as $worm)
                     <div class="p-3 " style=" border-style: outset; border-radius: 6px">
                         <div class="row ">
                             <div class="col-6 text-end">
-                                <div class="" >
+                                <div class="">
                                     <p>name :</p>
                                 </div>
                                 <div class="">
@@ -32,23 +32,19 @@
                                 <div class="">
                                     <p>Crée le :</p>
                                 </div>
-
                             </div>
                             <div class="col-6 text-start">
-                                <div >
-                                    <p>{{$worm->code}}</p>
+                                <div>
+                                    <p>{{ $worm->code }}</p>
                                 </div>
                                 <div class="">
-                                    <p>{{((float)$worm->weight)/1000}} kg</p>
+                                    <p>{{ ((float) $worm->weight) / 1000 }} kg</p>
                                 </div>
                                 <div class="">
-                                    <p>{{substr($worm->created_at,0,10)}}</p>
+                                    <p>{{ substr($worm->created_at, 0, 10) }}</p>
                                 </div>
-
-
                             </div>
                         </div>
-
                     </div>
                 @endforeach
             </div>

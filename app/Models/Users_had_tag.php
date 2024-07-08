@@ -12,7 +12,7 @@ class Users_had_tag extends Model
     protected $fillable = [
         'id',
         'tag_id',
-        'user_id'        
-        
+        'user_id'
+
     ];
 }

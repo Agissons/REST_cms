@@ -16,27 +16,21 @@ class UserController extends Controller
         return view('users.register');
     }
 
-
-
     //fonction d'affichage de la View Login
     public  function login()
     {
         return view('users.login');
     }
 
-
-
     //fonction de creation de l'utilisateur
     public function create(Request $request)
     {
         $formFields = $request->validate([
             // verifie si l'utilisateur existe déjà
-            'username'=>['required', Rule::unique('users','username')],
-            'email'=>'required|email',
-            'password'=>'required|confirmed|min:8'
+            'username' => ['required', Rule::unique('users', 'username')],
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8'
         ]);
-
-
 
         $formFields['password'] = bcrypt($formFields['password']);
 
@@ -45,42 +39,33 @@ class UserController extends Controller
         $user->username = $formFields['username'];
         $user->password = $formFields['password'];
         $user->email = $formFields['email'];
-        $user->created_at = date('Y-m-d H:i:s',strtotime('now'));
-
+        $user->created_at = date('Y-m-d H:i:s', strtotime('now'));
 
         $user->save();
         auth()->login($user);
         $request->session()->regenerate();
 
-
         return redirect('/');
-
-
-
     }
-
 
     //Fonction de connection
     public function log(Request $request)
     {
-        $formFields = $request ->validate([
-            'username'=>'required',
-            'password'=>'required'
+        $formFields = $request->validate([
+            'username' => 'required',
+            'password' => 'required'
         ]);
 
         $user = User::firstWhere('username', $request->username);
         //regarde si l'utilisateur existe
-        if ($user){
-            if(auth()->attempt($formFields)){
+        if ($user) {
+            if (auth()->attempt($formFields)) {
                 $request->session()->regenerate();
                 return redirect('/');
             }
-
         }
-        return back()->withErrors(['username'=>'erreur de dans l\'un des champs'])->onlyInput('username');
-
+        return back()->withErrors(['username' => 'erreur de dans l\'un des champs'])->onlyInput('username');
     }
-
 
     //Fonction de deconnexion
     public function logout(Request $request)

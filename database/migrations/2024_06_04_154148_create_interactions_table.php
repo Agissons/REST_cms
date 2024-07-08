@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('interactions', function (Blueprint $table) {
             $table->id();
-            $table->string('interaction',1000);
+            $table->string('interaction', 1000);
             $table->timestamps();
-            
         });
     }
 

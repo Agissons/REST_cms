@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignid('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
             $table->foreignid('interaction_id')->references('id')->on('interactions')->onDelete('cascade');
             $table->timestamps();
-
         });
     }
 

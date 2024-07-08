@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('next_move_types', function (Blueprint $table) {
             $table->id();
-            $table->string('type',40);
-
+            $table->string('type', 40);
         });
     }
 

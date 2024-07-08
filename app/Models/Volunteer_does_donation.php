@@ -13,5 +13,4 @@ class Volunteer_does_donation extends Model
         "campaign_id",
         "volunteer_id"
     ];
-    
 }

@@ -47,7 +47,7 @@ return new class extends Migration
         Schema::table('canal_groups', function (Blueprint $table) {
             $table->foreignid('canal_id')->references('id')->on('canals');
         });
-        
+
         Schema::table('volunteer_use_groups', function (Blueprint $table) {
             $table->foreignid('groups_id')->references('id')->on('canal_groups');
             $table->foreignid('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
@@ -68,7 +68,6 @@ return new class extends Migration
             $table->foreignid('campaign_id')->references('id')->on('campaigns');
             $table->foreignid('volunteer_id')->references('id')->on('volunteers');
         });
-
     }
 
     /**
@@ -76,6 +75,5 @@ return new class extends Migration
      */
     public function down(): void
     {
-        
     }
 };

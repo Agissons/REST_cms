@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('volunteer_sign_calls', function (Blueprint $table) {
             $table->id();
-            $table->string('question',1500);
+            $table->string('question', 1500);
             $table->timestamps();
         });
     }

@@ -24,17 +24,19 @@
                     <div class="mb-3 mt-3">
                         <label for="name">Nom de l'ensemble:</label>
                         <input type="text" class="form-control" name="name" placeholder="Nom de l'ensemble"
-                               value="{{old('name')}}">
+                            value="{{ old('name') }}">
                         @error('name')
-                        <p>{{$message}}</p>
+                            <p>{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="mb-3 row">
 
-                        <button type="submit" name="sign" class="btn btn-primary col-5" style="background-color: #a7c957;color:#bc4749;border:#386641">Crée</button>
+                        <button type="submit" name="sign" class="btn btn-primary col-5"
+                            style="background-color: #a7c957;color:#bc4749;border:#386641">Crée</button>
                         <div class="col-2"></div>
 
-                        <button type="reset" class="btn btn-primary col-5" style="background-color: #a7c957;color:#bc4749;border:#386641">Annuler</button>
+                        <button type="reset" class="btn btn-primary col-5"
+                            style="background-color: #a7c957;color:#bc4749;border:#386641">Annuler</button>
                     </div>
 
                 </form>
