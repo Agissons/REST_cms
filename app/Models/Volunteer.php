@@ -16,9 +16,12 @@ class Volunteer extends Model
         "primary_city",
         "primary_state",
         "primary_zip",
-        "primary_country_code",
+        "npa",
         "primary_country",
-        "organizer_id",
-        "volunteer_scale"
+        "organizer",
+        "volunteer_scale",
+        "fullname",
+        "exel_id", 
+        "new_id"
     ];
 }

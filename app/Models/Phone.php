@@ -11,6 +11,7 @@ class Phone extends Model
     protected $fillable = [
         "phone",
         'opt_in',
-        "volunteer_id"
+        "volunteer_id",
+        "volunteer_new_id"
     ];
 }

@@ -24,8 +24,13 @@ Route::get('/', function () {
 });
 Route::get('/combine', [ExelController::class, 'combine'])->name('combine');
 Route::get('/extract', [ExelController::class, 'extract'])->name('extract');
+Route::get('/npa', [ExelController::class, 'NPA'])->name('NPA');
 Route::get('/raisenowsynthesis', [ExelController::class, 'raisenowSynthesis'])->name('raisenowsynthesis');
+Route::get('/peoplefilter', [ExelController::class, 'peopleFilter'])->name('peoplefilter');
+Route::get('/emailcombine', [ExelController::class, 'emailCombine'])->name('emailCombine');
 Route::get('/display', [VolunteerController::class, 'display'])->name('display');
+Route::get('/phonecombine', [ExelController::class, 'phoneCombine'])->name('phoneCombine');
+Route::get('/donationtodb', [ExelController::class, 'donationToDb'])->name('donationToDb');
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::get('/create', [VolunteerController::class, 'create'])->name('create');

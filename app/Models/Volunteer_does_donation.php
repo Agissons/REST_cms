@@ -11,6 +11,9 @@ class Volunteer_does_donation extends Model
     protected $fillable = [
         "donations_amount",
         "campaign_id",
-        "volunteer_id"
+        "volunteer_id",
+        "volunteer_new_id",
+        "recurrent",
+        "created_at"
     ];
 }

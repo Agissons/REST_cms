@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donations', function (Blueprint $table) {
+        Schema::create('asks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('donations_amount');
             $table->timestamps();
-            $table->boolean('recurent');
-            $table->foreignid('campaign_id')->references('id')->on('campaigns');
-            $table->foreignid('volunteer_id')->references('id')->on('volunteers');
         });
     }
 
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vonlunteer_does_donations');
+        Schema::dropIfExists('asks');
     }
 };
