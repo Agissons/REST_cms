@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Volunteer_does_donation extends Model
+class Action_got_answer extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "donations_amount",
-        "campaign_id",
-        "volunteer_id",
-        "volunteer_new_id",
-        "recurrent",
+        'actions_questions_id',
+        "actions_id",
         "created_at",
         "updated_at"
     ];

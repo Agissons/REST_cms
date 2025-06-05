@@ -12,23 +12,25 @@ use App\Models\Volunteer_does_donation;
 use App\Models\Volunteer_scale;
 use App\Models\Volunteer_sign_call;
 use App\Models\Volunteer_use_canal;
-use App\Models\Volunteer_use_group;
-use App\Models\Next_move;
+use App\Models\Volunteer_answers_question;
+use App\Models\Volunteer_does_action;
 use App\Models\Call;
 use App\Models\Campaign;
 use App\Models\Phone;
 use App\Models\Email;
 use App\Models\Interaction_type;
 use App\Models\Interaction;
-use App\Models\Note;
-use App\Models\Canal;
-use App\Models\Canal_group;
+use App\Models\Action;
+use App\Models\Action_got_answer;
+use App\Models\Actions_question;
 use App\Models\Activist;
 use Throwable;
 
 use Illuminate\Support\Collection;
+use SebastianBergmann\Type\VoidType;
 use Termwind\Components\Li;
 
+use function Illuminate\Events\queueable;
 use function PHPUnit\Framework\isEmpty;
 use function PHPUnit\Framework\isNull;
 
@@ -39,7 +41,7 @@ class ExelController extends Controller
     {
         $volunteer = [];
     }
-
+    
     public function combine()
     {
         $header = null;
@@ -205,6 +207,10 @@ class ExelController extends Controller
     }
     public function extract()
     {
+        $this->listCutter("question");
+
+
+
         /*$data= Activist::where('donations_amount','>=',200)
         ->select("first_name","last_name","phone_number", 'email','primary_zip',"donations_amount", "last_donated_at")
         ->get();
@@ -217,7 +223,11 @@ class ExelController extends Controller
         fclose($handle);
         dd($data);*/
 
-        $data = DB::table('exels')->where('donations_amount','>=',100) 
+        $data = Volunteer_does_action::select(
+                "volunteers_id",
+                "volunteers_new_id",
+                "actions_id",
+                "created_at") 
         /*$data = DB::table('exels')->where('soutien', '=', 1)->orWhere('info', '=', 1)->orWhere(function (Builder $query) {
             $query->whereNotNull('wa2_enter_date')
                 ->Where(function (Builder $query2) {
@@ -231,97 +241,29 @@ class ExelController extends Controller
                         $query2->whereNull('wa3_exit_date')
                             ->orWhere('wa3_exit_date', '=', '0000-00-00 00:00:00');
                     });            })*/
-            ->select(
-                "id",
-                "first_name",
-                "last_name",
-                "phone_number",
-                "db",
-                "primary_zip",
-                "wa_enter_way",
-                "wa_enter_date",
-                "wa_exit_date",
-                "wa2_enter_date",
-                "wa2_exit_date",
-                "wa3_enter_date",
-                "wa3_exit_date",
-                "appel",
-                "info",
-                "soutien",
-                "donations_amount",
-                "new_donations_amount",
-                "rank",
-                "organiser"
-            )
+            
             /*->orderBy('soutien', 'asc')->orderBy('wa3_enter_date', 'desc')->orderBy('wa2_enter_date', 'desc')->orderBy('info', 'desc')*/
             ->get();
+            //dd($data[0]);
+            
+        $handle = fopen(public_path('csv/newVol1.csv'), 'w');
+        fputcsv($handle, [
+            "volunteers_id",
+                "volunteers_new_id",
+                "actions_id",
+                "created_at"
+        ], ',');
         
-
-        $handle = fopen(public_path('csv/don.csv'), 'w');
-        fputcsv($handle, [
-            'ID', 'Prénom', 'Nom', 'Numéro de téléphone', 'AN?', "Canton (selon NPA)",
-            'Suivi des mouvements dans les groupes Whatsapp - Communauté générale', '', '', '', '', '', '',
-            "Informations sur l'Appel", '', '', 'Informations concernant les Dons',
-            '', 'Indications générale de suivi', '', '', '', '', ''
-        ], ',');
-        fputcsv($handle, [
-            '', '', '', '', '', '', 'A! - Nos Transports Publics (Nos TP) (communauté)', '', '',
-            'A! - Nos TP - Accueil', '', 'A! - Nos TP - Actions de terrain', '', 'signé ?', 'recevoir des infos',
-            'soutenir activement', 'Somme dons précédents',
-            'Montant du don pour la levée de fonds NTP', 'Statut du(/de la) membre', 'Personne en charge'
-        ], ',');
-        fputcsv($handle, [
-            '', '', '', '', '', '', "Moyen d'entrée", "Date d'entrée", 'Date de sortie', "Date d'entrée", 'Date de sortie', "Date d'entrée",
-            'Date de sortie', '', '', '', '', '', '', ''
-        ], ',');
         foreach ($data as $row) {
 
 
-            $collec = collect($row);
-            if ($collec['wa_enter_date'] == '0000-00-00 00:00:00') {
-                $collec['wa_enter_date'] = '';
-            }
-            if ($collec['wa_exit_date'] == '0000-00-00 00:00:00') {
-                $collec['wa_exit_date'] = '';
-            }
-            if ($collec['wa2_enter_date'] == '0000-00-00 00:00:00') {
-                $collec['wa2_enter_date'] = '';
-            }
-            if ($collec['wa2_exit_date'] == '0000-00-00 00:00:00') {
-                $collec['wa2_exit_date'] = '';
-            }
-            if ($collec['wa3_enter_date'] == '0000-00-00 00:00:00') {
-                $collec['wa3_enter_date'] = '';
-            }
-            if ($collec['wa3_exit_date'] == '0000-00-00 00:00:00') {
-                $collec['wa3_exit_date'] = '';
-            }
-            if ($collec['db'] == 0) {
-
-                $collec['db'] = 'non';
-            } else {
-                $collec['db'] = 'oui';
-            }
-            if ($collec['appel'] == 0) {
-                $collec['appel'] = 'non';
-            } else {
-                $collec['appel'] = 'oui';
-            }
-            if ($collec['info'] == 0) {
-                $collec['info'] = 'non';
-            } else {
-                $collec['info'] = 'oui';
-            }
-            if ($collec['soutien'] == 0) {
-                $collec['soutien'] = 'non';
-            } else {
-                $collec['soutien'] = 'oui';
-            }
-            
-            fputcsv($handle, $collec->toArray(), ',');
+            $row2=$row->toArray();
+            $row2["created_at"]=str_replace(["T",".000000Z"],[" ",""],$row2["created_at"]);
+            //dd($row2);
+            fputcsv($handle, $row2, ',');
         }
         fclose($handle);
-        dd($data);
+        dd($row2);
     }
 
     public function dbToexel()
@@ -541,11 +483,11 @@ class ExelController extends Controller
             }
             fclose($handle);
         }
-        $quantity=floor(sizeof($data)/1000);
-        $rest=sizeof($data)%1000;
+        $quantity=floor(sizeof($data)/500);
+        $rest=sizeof($data)%500;
         $listcut=[];
         for ($x = 0; $x < $quantity; $x++) {  
-            array_push( $listcut,array_slice($data, $x*1000, 1000));
+            array_push( $listcut,array_slice($data, $x*500, 500));
         }
         array_push( $listcut,array_slice($data, -$rest));
        
@@ -567,6 +509,7 @@ class ExelController extends Controller
 
     public function emailCombine()
     {
+        
         $header = null;
         $header2 = null;
 
@@ -1039,6 +982,403 @@ class ExelController extends Controller
             
             //array_push($donationlist,[$row['created'],$found->volunteer_id,$found->volunteer_new_id,intval($row["amount"])/100,$row["is_recurring"]]);
         }
+        
+
+        $handle = fopen(public_path('csv/donationformated.csv'), 'w');
+        fputcsv($handle, ["created",
+        "volunteer_id",
+        "volunteer_new_id",'amount','recurrent'], ',');
+        foreach ($donationlist as $row) {
+
+
+            fputcsv($handle, $row, ',');
+        }
+        fclose($handle);
+        //dd($donationlist);
+        
+
+        foreach ($donationlist as $row) {
+            if($row[4]=="true"){
+                $row[4]=1;
+            }else{
+                $row[4]=0;
+            }
+            Volunteer_does_donation::insert(["donations_amount" => $row[3], "created_at" => $row[0], "volunteer_id" => $row[1], 'volunteer_new_id' => $row[2], "recurrent" =>$row[4]]);
+            //dd($row);
+
+
+           
+        }
+        dd($donationlist);
+
+        $users = Email::select("email" , "volunteer_id" , 'volunteer_new_id')->get();
+        //dd($users);
+        $handle = fopen(public_path('csv/donationformated.csv'), 'w');
+
+        
+
+        
+
+        foreach( $dbdata as $row){
+            
+            Phone::insertOrIgnore(["phone_number" => $row['phone'], "opt_in" => 1, "volunteer_id" => intval($row['volunteer_id']), 'volunteer_new_id' => intval($row['volunteer_new_id'])]);
+            
+
+            
+
+        }
+       
+
+
+    
+        
+
+
+        foreach( $dbdata as $row){
+            
+            $found= Volunteer::select('id', 'fullname','new_id')->firstWhere('exel_id', $row['id']);
+            
+            if(is_null($found)){
+                
+                $found= Volunteer::select('id', 'fullname','new_id')->firstWhere('fullname', $row['fullname']);
+                if(is_null($found)){
+                    dd($found,$row);
+                    
+                    
+                }
+            }
+            
+            array_push($phonelist,[$row['phone'],$found->id,$found->new_id,0]);
+
+            
+
+            
+
+        }
+
+        $handle = fopen(public_path('csv/use/emailtablebis2.csv'), 'w');
+        fputcsv($handle, ["phone",
+        "volunteer_id",
+        "volunteer_new_id",'opt_in'], ',');
+        foreach ($phonelist as $row) {
+
+
+            fputcsv($handle, $row, ',');
+        }
+        fclose($handle);
+        dd($phonelist);
+        dd($dbdata);
+
+
+
+
+        if (($handle = fopen(public_path('csv/use/havemail.csv'), 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!$header)
+                {
+                    $header = $row;
+                    array_push($header,'fullname');
+                }
+
+                else
+                {
+                    $row['fullname']= $row[4].' '.$row[3];
+                    $row['fullname']=preg_replace('%  %', ' ', $row['fullname']);
+                    $row['fullname']=preg_replace('/\s+$/', '', $row['fullname']);
+                    
+
+                    $data[] = array_combine($header, $row);
+                }
+            }
+            fclose($handle);
+        }
+        
+        
+        
+        //dd($emaillist);
+
+       
+
+        
+        
+        $users = Volunteer::select("first_name",
+        "last_name",
+        "primary_address1",
+        "primary_city",
+        "primary_state",
+        "primary_zip",
+        "npa",
+        "primary_country",
+        "organizer",
+        "volunteer_scale",
+        "id")->get();
+        //dd($users);
+        $handle = fopen(public_path('csv/noco.csv'), 'w');
+
+        foreach ($users as $row) {
+
+
+            fputcsv($handle, $row->toArray(), ',');
+        }
+        fclose($handle);
+
+        
+        
+        Phone::insertOrIgnore(["phone" => "test@hotmail.com", "opt_in" => 0, "volunteer_id" => 9, 'volunteer_new_id' => 4]);
+        
+        
+
+       
+        if (($handle = fopen(public_path('csv/use/nmail.csv'), 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!$header2)
+                {
+                    $header2 = $row;
+                    array_push($header2,'fullname');
+                }
+
+                else
+                {
+                    if($row[3]!=''&&' '){
+                        
+                    }
+                    else{
+                        $row['fullname'] =$row[4];
+                        $row['fullname']=preg_replace('%  %', ' ', $row['fullname']);
+                    }
+                    
+                    $dbdata[] = array_combine($header2, $row);
+                }
+                    
+            }
+            fclose($handle);
+        }
+        
+        
+        foreach($users as $user){
+            
+            $user->fullname =substr($user->fullname, 0, -1);
+            
+            $user->save();
+           
+        }
+       
+        
+        
+
+        
+        
+        $dbdata = Exel::select("id", 'email','npa','last_name','first_name','phone_number','rank',"organiser","primary_zip")
+            ->get();
+
+        
+        
+        
+        
+        foreach ($data as $row) {
+
+            $row['amount'] = intval($row['amount']);
+            if (in_array($row["email"], $emaillist)) {
+                for ($x = 0; $x < count($construct); $x++) {
+                    if ($row["email"] == $construct[$x]["email"]) {
+                        $construct[$x]['amount'] +=  $row['amount'];
+                    }
+                }
+            } else {
+                array_push($emaillist, $row["email"]);
+                array_push($construct, $row);
+            }
+
+
+
+            //return view('fail',[]);
+        }
+        
+
+        //$construct = array_filter($construct, fn ($e) => ($e['amount_formatted'] >= 150));
+
+        $handle = fopen(public_path('csv/doncf.csv'), 'w');
+        fputcsv($handle, $header2, ',');
+        foreach ($construct as $row) {
+            fputcsv($handle, $row, ',');
+        }
+        
+        $nbdata = Activist::where('donations_amount', '>=', 100)
+            ->select("first_name", "last_name", "phone_number", 'email', 'primary_zip', "donations_amount", "last_donated_at")
+            ->get();
+        
+        dd($nbdata);
+        dd($construct);
+    }
+
+     public function actionToDb()
+    {
+        $header = null;
+        
+
+        $data = array();
+        $donationlist = array();
+        $dbdata = array();
+        $id =1;
+
+        for ($j = 37; $j <= 38; $j++) {
+            if (($handle = fopen(public_path('csv/actions/Reports_AN2/'.'action_'.strval($j).'.csv'), 'r')) !== false) {
+                while (($row = fgetcsv($handle, 2000, ',')) !== false) {
+                    if (!$header)
+                    {
+                        //dd($header, $row);
+                        $header = $row;
+                    }
+
+                    else
+                    {
+                        
+                    $dbdata[] = array_combine($header, $row);
+                    }
+                }
+                fclose($handle);
+            }
+            foreach ($dbdata as $row) {
+            $volunteer=Email::select('volunteer_id','volunteer_new_id')->firstWhere('email', $row["email"]);
+            //dd($row, is_null($volunteer));
+            if(is_null($volunteer)){
+                //dd($row);
+                $volid=Volunteer::select('id','new_id')->firstWhere( "fullname","=",$row["first_name"].' '.$row['last_name']);
+                //dd($volid,$row);
+                Email::insertOrIgnore(['volunteer_id' => $volid->id,  'volunteer_new_id' => $volid->new_id, 'email' => $row["email"],"opt_in" => 1 ]);
+                if(!$row["can2_phone"]==''){
+                    Phone::insertOrIgnore(['volunteer_id' => $volid->id,  'volunteer_new_id' => $volid->new_id, 'phone_number' => intval($row["can2_phone"]),"opt_in" => 0 ]);
+                }
+
+
+            }
+            Volunteer_does_action::insert(['volunteers_id' => $volunteer->volunteer_id, "created_at" => substr($row["can2_user_time_stamp"], 0, -4), 'volunteers_new_id' => $volunteer->volunteer_new_id, 'actions_id' => ($j+1)]);
+            //dd(['volunteer_id' => $volunteer->volunteer_id, "created_at" => substr($row["can2_user_time_stamp"], 0, -4), 'volunteer_new_id' => $volunteer->volunteer_new_id, 'actions_id' => $id]);
+            if(count($row)>6)
+            for ($i = 6; $i < count($row); $i++) {
+        if(!$row[$header[$i]]==''){
+            //dd(['volunteers_id' => $volunteer->volunteer_id, "created_at" => substr($row["can2_user_time_stamp"], 0, -4), 'volunteers_new_id' => $volunteer->volunteer_new_id, 'actions_questions_id' =>intval( $header[$i]), 'answers'=>$row[$header[$i]]]);
+            Volunteer_answers_question::insert(['volunteers_id' => $volunteer->volunteer_id, "created_at" => substr($row["can2_user_time_stamp"], 0, -4), 'volunteers_new_id' => $volunteer->volunteer_new_id, 'actions_questions_id' => $header[$i], 'answers'=>$row[$header[$i]]]);
+                }
+                
+            }
+
+        }
+        
+         $dbdata = array();
+            $header = null;
+
+            /*if(count($header)>6){
+
+            //dd($header);
+            for ($i = 6; $i < count($header); $i++) {
+                $question=Actions_question::select("id" )->firstWhere("name", "=",$header[$i]);
+                $header2[$i]= $question->id;
+                
+                
+            }
+            $handle = fopen(public_path('csv/actions/Reports_AN2/'.'action_'.strval($j).'.csv'), 'w');
+                fputcsv($handle, $header2, ',');
+                foreach ($dbdata as $row) {
+                    fputcsv($handle, $row, ',');
+                }
+                fclose($handle);
+                $header2 = null;
+            }
+            else{
+                $handle = fopen(public_path('csv/actions/Reports_AN2/'.'action_'.strval($j).'.csv'), 'w');
+                fputcsv($handle, $header, ',');
+                foreach ($dbdata as $row) {
+                    fputcsv($handle, $row, ',');
+                }
+                fclose($handle);
+                
+
+            }
+            $dbdata = array();
+            $header = null;
+            */
+                
+
+
+        }
+        dd($dbdata, $header);
+
+        
+
+        if (($handle = fopen(public_path('csv/actions/Reports_AN/'.'action_'.strval($id-1).'.csv'), 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!$header)
+                {
+                    $header = $row;
+                }
+
+                else
+                {
+                    $dbdata[] = array_combine($header, $row);
+                }
+            }
+            fclose($handle);
+        }
+        //$questions = Actions_question::select("id" , "name")->get()->toArray();
+        
+        
+        
+        dd($dbdata, $header);
+
+        $actions = Action::select("id" , "name", "type", "description" )->get()->toArray();
+        
+        $answers = Action_got_answer::select("id" , "actions_id", "actions_questions_id" )->get()->toArray();
+         
+
+        $handle = fopen(public_path('csv/actions/action.csv'), 'w');
+        fputcsv($handle, ["id" , "name", "type", "description"], ',');
+        foreach ($actions as $row) {
+
+
+            fputcsv($handle, $row, ',');
+        }
+        fclose($handle);
+        $handle = fopen(public_path('csv/actions/Reports_AN2/'.'action_'.strval($j).'.csv'), 'w');
+        fputcsv($handle, ["id" , "name", "label"], ',');
+        foreach ($questions as $row) {
+
+
+            fputcsv($handle, $row, ',');
+        }
+        fclose($handle);
+        $handle = fopen(public_path('csv/actions/answer.csv'), 'w');
+        fputcsv($handle, ["id" , "actions_id", "actions_questions_id"], ',');
+        foreach ($answers as $row) {
+
+
+            fputcsv($handle, $row, ',');
+        }
+        fclose($handle);
+        dd($dbdata);
+        
+        
+        
+
+        foreach( $actions as $row){
+            $usedquestions = Actions_question::select("id" , "id_action" )->where("id_action","regexp", $row['name'] )->get();
+           
+            foreach( $usedquestions as $question){
+                //dd( $row , $question );
+
+                Action_got_answer::create(['actions_id' => $row["id"], 'actions_questions_id' => $question["id"]]);
+                }
+
+            
+            
+            
+            
+            
+
+        }
+        dd($dbdata);
+
+        
         
 
         $handle = fopen(public_path('csv/donationformated.csv'), 'w');

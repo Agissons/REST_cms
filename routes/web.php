@@ -31,6 +31,7 @@ Route::get('/emailcombine', [ExelController::class, 'emailCombine'])->name('emai
 Route::get('/display', [VolunteerController::class, 'display'])->name('display');
 Route::get('/phonecombine', [ExelController::class, 'phoneCombine'])->name('phoneCombine');
 Route::get('/donationtodb', [ExelController::class, 'donationToDb'])->name('donationToDb');
+Route::get('/actiontodb', [ExelController::class, 'actionToDb'])->name('actionToDb');
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::get('/create', [VolunteerController::class, 'create'])->name('create');
